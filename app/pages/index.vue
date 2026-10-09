@@ -1,14 +1,9 @@
 <script setup lang="ts">
-    const title = 'Sicilia, da vivere';
-    type Experience = {
-    id: number
-    title: string
-    description: string
-    price: number
-    }
-
+    import type { Experience } from '~~/shared/types/experience'
+    
     const { data: experiences, status, error } = await useFetch<Experience[]>('/api/experiences')
-    console.log(experiences.value)
+    
+    const title = 'Sicilia, da vivere';
 </script>
 
 <template>
@@ -18,17 +13,16 @@
 
     <section>
         <h2>Le esperienze</h2>
-
         <p v-if="status === 'pending'">Caricamento...</p>
         <p v-else-if="error">Non siamo riusciti a caricare i contenuti.</p>
-
         <div v-else>
             <ExperienceCard
                 v-for="experience in experiences"
-                :key="experience.id"
-                :title="experience.title"
-                :description="experience.description"
-                :price="experience.price"
+                    :key="experience.id"
+                    :id="experience.id"
+                    :title="experience.title"
+                    :description="experience.description"
+                    :price="experience.price"
             />
         </div>
     </section>

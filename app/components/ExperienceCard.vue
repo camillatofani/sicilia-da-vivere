@@ -1,5 +1,6 @@
 <script setup lang="ts">
 type CardProps = {
+  id: number
   title?: string
   description?: string
   price?: number
@@ -17,5 +18,8 @@ withDefaults(defineProps<CardProps>(), {
     <h2>{{ title }}</h2>
     <p>{{ description }}</p>
     <p>{{ price }} € a persona</p>
+    <NuxtLink :to="`/experiences/${id}`">
+      Scopri l'esperienza
+    </NuxtLink>
   </article>
 </template>
