@@ -1,5 +1,15 @@
 <script setup lang="ts">
-  const title = 'Sicilia, da vivere';
+    const title = 'Sicilia, da vivere';
+    type Post = {
+        id: number
+        title: string
+        body: string
+    }
+
+    const { data: posts, status, error } = await useFetch<Post[]>(
+        'https://jsonplaceholder.typicode.com/posts?_limit=3'
+    )
+    console.log(posts.value)
 </script>
 
 <template>
@@ -7,16 +17,22 @@
     <h1>{{ title }}</h1>
     <p>Scopri le esperienze della nostra isola.</p>
 
-    <ExperienceCard />
-    <ExperienceCard
-        title="Street food a Palermo"
-        description="Una passeggiata tra mercati e sapori siciliani."
-        :price="45"
-    />
-    <ExperienceCard
-        title="Escursione sull’Etna"
-        description="Un percorso tra crateri e paesaggi vulcanici."
-        :price="70"
-    />
+    <section>
+        <h2>Le esperienze</h2>
+
+        <p v-if="status === 'pending'">Caricamento...</p>
+        <p v-else-if="error">Non siamo riusciti a caricare i contenuti.</p>
+
+        <div v-else>
+            <ExperienceCard
+                v-for="post in posts"
+                    :key="post.id"
+                    :title="post.title"
+                    :description="post.body"
+                    :price="post.id * 10"
+            />
+        </div>
+    </section>
+
   </main>
 </template>
