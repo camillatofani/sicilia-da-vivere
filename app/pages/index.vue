@@ -1,15 +1,14 @@
 <script setup lang="ts">
     const title = 'Sicilia, da vivere';
-    type Post = {
-        id: number
-        title: string
-        body: string
+    type Experience = {
+    id: number
+    title: string
+    description: string
+    price: number
     }
 
-    const { data: posts, status, error } = await useFetch<Post[]>(
-        'https://jsonplaceholder.typicode.com/posts?_limit=3'
-    )
-    console.log(posts.value)
+    const { data: experiences, status, error } = await useFetch<Experience[]>('/api/experiences')
+    console.log(experiences.value)
 </script>
 
 <template>
@@ -25,11 +24,11 @@
 
         <div v-else>
             <ExperienceCard
-                v-for="post in posts"
-                    :key="post.id"
-                    :title="post.title"
-                    :description="post.body"
-                    :price="post.id * 10"
+                v-for="experience in experiences"
+                :key="experience.id"
+                :title="experience.title"
+                :description="experience.description"
+                :price="experience.price"
             />
         </div>
     </section>
