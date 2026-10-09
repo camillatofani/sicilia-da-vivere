@@ -5,12 +5,14 @@ export const experiences: Experience[] = [
     id: 1,
     title: 'Street food a Palermo',
     description: 'Una passeggiata tra mercati e sapori siciliani.',
-    price: 45
+    price: 45,
+    imageUrl: '/images/palermo.avif'
   },
   {
     id: 2,
     title: 'Escursione sull’Etna',
     description: 'Un percorso tra crateri e paesaggi vulcanici.',
-    price: 70
+    price: 70,
+    imageUrl: '/images/etna.avif'
   }
 ]
