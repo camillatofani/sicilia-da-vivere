@@ -23,6 +23,27 @@
     "loadError": "We could not load the experience.",
     "departuresError": "We could not load the departures."
   },
+  "booking": {
+    "checking": "Checking your booking...",
+    "loadError": "We could not verify your booking.",
+    "confirmed": "Booking confirmed!",
+    "participants": "Participants",
+    "paidTotal": "Total paid",
+    "processing": "Confirmation in progress",
+    "waiting": "We are waiting for payment confirmation.",
+    "expired": "Booking expired",
+    "cancelled": "Booking cancelled",
+    "inactive": "This booking is no longer active.",
+    "refresh": "Check status again",
+    "released": "The reserved spots are available again.",
+    "alreadyCompleted": "Payment has already been completed",
+    "cannotCancel": "This booking cannot be cancelled from this page.",
+    "cancelQuestion": "Would you like to cancel your booking?",
+    "cancelExplanation": "We will close the checkout and release your reserved spots.",
+    "cancelling": "Cancelling...",
+    "confirmCancellation": "Confirm cancellation",
+    "cancelError": "We could not cancel your booking. Please try again."
+  },
   "errors": {
     "notFound": "This page does not exist or is no longer available.",
     "generic": "Something went wrong."

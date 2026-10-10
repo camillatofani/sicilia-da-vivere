@@ -23,6 +23,27 @@
     "loadError": "Non siamo riusciti a caricare l’esperienza.",
     "departuresError": "Non siamo riusciti a caricare le partenze."
   },
+  "booking": {
+    "checking": "Verifichiamo la prenotazione...",
+    "loadError": "Non siamo riusciti a verificare la prenotazione.",
+    "confirmed": "Prenotazione confermata!",
+    "participants": "Partecipanti",
+    "paidTotal": "Totale pagato",
+    "processing": "Conferma in elaborazione",
+    "waiting": "Stiamo aspettando la conferma del pagamento.",
+    "expired": "Prenotazione scaduta",
+    "cancelled": "Prenotazione annullata",
+    "inactive": "Questa prenotazione non è attiva.",
+    "refresh": "Ricontrolla lo stato",
+    "released": "I posti riservati sono tornati disponibili.",
+    "alreadyCompleted": "Il pagamento è già stato completato",
+    "cannotCancel": "Non è possibile annullare la prenotazione da questa pagina.",
+    "cancelQuestion": "Vuoi annullare la prenotazione?",
+    "cancelExplanation": "Chiuderemo il pagamento e libereremo i posti riservati.",
+    "cancelling": "Annullamento in corso...",
+    "confirmCancellation": "Conferma annullamento",
+    "cancelError": "Non siamo riusciti ad annullare la prenotazione. Riprova."
+  },
   "errors": {
     "notFound": "Questa pagina non esiste o non è più disponibile.",
     "generic": "Qualcosa è andato storto."

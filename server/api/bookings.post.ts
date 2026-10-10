@@ -15,6 +15,14 @@ export default defineEventHandler(async (event) => {
 
     const departureId = body?.departureId
     const participants = body?.participants
+    const locale = body?.locale ?? 'it'
+
+    if (locale !== 'it' && locale !== 'en') {
+        throw createError({
+            statusCode: 400,
+            statusMessage: 'Unsupported locale'
+        })
+    }
 
     if (
         !Number.isInteger(departureId) ||
@@ -76,13 +84,16 @@ export default defineEventHandler(async (event) => {
         session = await stripe.checkout.sessions.create(
             {
                 mode: 'payment',
+                locale,
 
                 line_items: [
                     {
                         price_data: {
                             currency: 'eur',
                             product_data: {
-                                name: 'Prenotazione Sicilia, da vivere'
+                                name: locale === 'en'
+                                    ? '"Sicilia da vivere" booking'
+                                    : 'Prenotazione "Sicilia da vivere"'
                             },
                             unit_amount: data.total_cents
                         },
@@ -97,10 +108,10 @@ export default defineEventHandler(async (event) => {
                 expires_at: Math.floor(Date.now() / 1000) + 30 * 60 + 10,
 
                 success_url:
-                    `${config.siteUrl}/booking/success?session_id={CHECKOUT_SESSION_ID}`,
+                `${config.siteUrl}/${locale}/booking/success?session_id={CHECKOUT_SESSION_ID}`,
 
                 cancel_url:
-                    `${config.siteUrl}/booking/cancel?token=${cancellationToken}`
+                `${config.siteUrl}/${locale}/booking/cancel?token=${cancellationToken}`
             },
             {
                 idempotencyKey: `booking-${data.id}`

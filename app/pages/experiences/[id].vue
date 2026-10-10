@@ -81,7 +81,8 @@ async function book() {
       method: 'POST',
       body: {
         departureId: selectedDepartureId.value,
-        participants: participants.value
+        participants: participants.value,
+        locale: locale.value
       }
     })
 
@@ -117,7 +118,7 @@ async function book() {
           </p>
 
           <p class="mt-6 text-xl font-semibold">
-            {{ experience.price }} € {{ t('experience.price') }}
+            {{ experience.price }}€ {{ t('experience.price') }}
           </p>
 
           <div class="mt-6">
@@ -183,7 +184,7 @@ async function book() {
             </select>
 
             <p class="mt-4 text-xl font-bold">
-              {{ t('experience.total') }}: {{ total }} €
+              {{ t('experience.total') }}: {{ total }}€
             </p>
 
             <button type="button" :disabled="!canBook || isBooking"
