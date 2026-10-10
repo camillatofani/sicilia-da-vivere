@@ -4,7 +4,7 @@ import type { Booking } from '~~/shared/types/experience'
 const { t, locale } = useI18n()
 const localePath = useLocalePath()
 
-const { cart, cartReady, clearCart } = useCart()
+const { cart, cartReady, clearCart, markCheckout } = useCart()
 
 const {
   experience,
@@ -35,6 +35,7 @@ async function checkout() {
       }
     })
 
+    markCheckout(booking.checkoutSessionId)
     window.location.assign(booking.checkoutUrl)
   } catch {
     bookingError.value = t('cart.checkoutError')

@@ -54,6 +54,7 @@ export function useCart() {
     if (import.meta.client) {
       try {
         localStorage.setItem(STORAGE_KEY, JSON.stringify(cart.value))
+        localStorage.removeItem('sicilia-da-vivere-checkout')
       } catch {
         // Il carrello resta utilizzabile senza persistenza.
       }
@@ -66,9 +67,39 @@ export function useCart() {
     if (import.meta.client) {
       try {
         localStorage.removeItem(STORAGE_KEY)
+        localStorage.removeItem('sicilia-da-vivere-checkout')
       } catch {
         // Lo stato in memoria è stato comunque svuotato.
       }
+    }
+  }
+
+  function markCheckout(sessionId: string) {
+    if (!import.meta.client) return
+
+    try {
+      localStorage.setItem(
+        'sicilia-da-vivere-checkout',
+        sessionId
+      )
+    } catch {
+      // Senza persistenza non svuotiamo automaticamente il carrello.
+    }
+  }
+
+  function clearPaidCart(sessionId: string) {
+    if (!import.meta.client) return
+
+    try {
+      const savedSessionId = localStorage.getItem(
+        'sicilia-da-vivere-checkout'
+      )
+
+      if (savedSessionId !== sessionId) return
+
+      clearCart()
+    } catch {
+      // Il carrello resta disponibile se lo storage non è accessibile.
     }
   }
 
@@ -76,6 +107,8 @@ export function useCart() {
     cart: readonly(cart),
     cartReady: readonly(cartReady),
     setCart,
-    clearCart
+    clearCart,
+    markCheckout,
+    clearPaidCart
   }
 }

@@ -9,6 +9,8 @@ const { t } = useI18n()
 const localePath = useLocalePath()
 const route = useRoute()
 
+const { cartReady, clearPaidCart } = useCart()
+
 const {
   data: booking,
   status,
@@ -19,6 +21,24 @@ const {
     session_id: computed(() => route.query.session_id)
   }
 })
+
+watch(
+  [
+    cartReady,
+    () => booking.value?.status,
+    () => route.query.session_id
+  ],
+  ([ready, bookingStatus, sessionId]) => {
+    if (
+      ready &&
+      bookingStatus === 'paid' &&
+      typeof sessionId === 'string'
+    ) {
+      clearPaidCart(sessionId)
+    }
+  },
+  { immediate: true }
+)
 </script>
 
 <template>

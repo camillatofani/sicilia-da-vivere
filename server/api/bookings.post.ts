@@ -8,6 +8,7 @@ type BookingRow = {
     total_cents: number
     status: 'pending' | 'paid' | 'expired' | 'cancelled'
     expires_at: string
+    checkoutSessionId: string
 }
 
 export default defineEventHandler(async (event) => {
@@ -141,7 +142,8 @@ export default defineEventHandler(async (event) => {
             total: data.total_cents / 100,
             status: data.status,
             expiresAt: data.expires_at,
-            checkoutUrl: session.url
+            checkoutUrl: session.url,
+            checkoutSessionId: session.id
         }
     } catch (checkoutError) {
         console.error('Checkout creation failed:', checkoutError)
