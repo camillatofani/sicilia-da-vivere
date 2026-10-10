@@ -17,6 +17,8 @@
     "soldOut": "No spots available",
     "selectedDeparture": "Selected departure: {date} at {time}",
     "total": "Total",
+    "addToCart": "Add to cart",
+    "updateSelection": "Update selection",
     "book": "Book now",
     "booking": "Preparing your booking...",
     "bookingError": "We could not prepare your booking. Please try again.",
@@ -43,6 +45,19 @@
     "cancelling": "Cancelling...",
     "confirmCancellation": "Confirm cancellation",
     "cancelError": "We could not cancel your booking. Please try again."
+  },
+  "cart": {
+    "title": "Cart",
+    "empty": "Your cart is empty.",
+    "loadError": "We could not load your cart.",
+    "refresh": "Try again",
+    "reservationNotice": "Your spots will be reserved when you proceed to payment.",
+    "notEnoughSpots": "There are not enough spots for your selection. Please update your booking.",
+    "checkout": "Proceed to payment",
+    "changeSelection": "Change selection",
+    "unavailable": "This experience or departure is no longer available.",
+    "checkoutError": "We could not open checkout. Please check availability and try again.",
+    "clear": "Clear cart"
   },
   "errors": {
     "notFound": "This page does not exist or is no longer available.",

@@ -17,6 +17,8 @@
     "soldOut": "Nessun posto disponibile",
     "selectedDeparture": "Partenza selezionata: {date} alle {time}",
     "total": "Totale",
+    "addToCart": "Aggiungi al carrello",
+    "updateSelection": "Aggiorna scelta",
     "book": "Prenota",
     "booking": "Prenotazione in corso...",
     "bookingError": "Non siamo riusciti a preparare la prenotazione. Riprova.",
@@ -43,6 +45,19 @@
     "cancelling": "Annullamento in corso...",
     "confirmCancellation": "Conferma annullamento",
     "cancelError": "Non siamo riusciti ad annullare la prenotazione. Riprova."
+  },
+  "cart": {
+    "title": "Carrello",
+    "empty": "Il carrello è vuoto.",
+    "loadError": "Non siamo riusciti a caricare il carrello.",
+    "refresh": "Riprova",
+    "reservationNotice": "I posti saranno riservati quando procedi al pagamento.",
+    "notEnoughSpots": "Non ci sono abbastanza posti per la tua selezione. Modifica la prenotazione.",
+    "checkout": "Procedi al pagamento",
+    "changeSelection": "Modifica la selezione",
+    "unavailable": "L’esperienza o la partenza non è più disponibile.",
+    "checkoutError": "Non siamo riusciti ad aprire il pagamento. Verifica la disponibilità e riprova.",
+    "clear": "Svuota carrello"
   },
   "errors": {
     "notFound": "Questa pagina non esiste o non è più disponibile.",

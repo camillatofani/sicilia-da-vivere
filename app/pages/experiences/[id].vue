@@ -1,13 +1,21 @@
 <script setup lang="ts">
 import type {
   Experience,
-  Departure,
-  Booking
+  Departure
 } from '~~/shared/types/experience'
 
 const { t, locale } = useI18n()
 const localePath = useLocalePath()
 const route = useRoute()
+
+const { cart, cartReady, setCart } = useCart()
+
+const isEditing = computed(() => {
+  return route.query.edit === '1'
+    && cart.value?.experienceId === Number(route.params.id)
+})
+
+const restoredSelection = ref(false)
 
 const {
   data: experience,
@@ -52,6 +60,36 @@ watch(selectedDeparture, (departure) => {
   }
 }, { flush: 'post' })
 
+watch(
+  [cartReady, cart, departures, () => route.query.edit],
+  () => {
+    if (
+      restoredSelection.value ||
+      !cartReady.value ||
+      !isEditing.value ||
+      !cart.value ||
+      !departures.value
+    ) {
+      return
+    }
+
+    const savedDeparture = departures.value.find(
+      departure => departure.id === cart.value?.departureId
+    )
+
+    if (savedDeparture) {
+      selectedDepartureId.value = savedDeparture.id
+
+      participants.value = savedDeparture.available === 0
+        ? 0
+        : Math.min(cart.value.participants, savedDeparture.available)
+    }
+
+    restoredSelection.value = true
+  },
+  { immediate: true }
+)
+
 const total = computed(() => {
   return (experience.value?.price ?? 0) * participants.value
 })
@@ -67,32 +105,18 @@ const canBook = computed(() => {
     && participants.value <= (departure?.available ?? 0)
 })
 
-const isBooking = ref(false)
-const bookingError = ref('')
-
-async function book() {
-  if (!canBook.value || isBooking.value) return
-
-  isBooking.value = true
-  bookingError.value = ''
-
-  try {
-    const booking = await $fetch<Booking>('/api/bookings', {
-      method: 'POST',
-      body: {
-        departureId: selectedDepartureId.value,
-        participants: participants.value,
-        locale: locale.value
-      }
-    })
-
-    window.location.assign(booking.checkoutUrl)
-  } catch (error) {
-    console.error('Errore prenotazione:', error)
-    bookingError.value = t('experience.bookingError')
-  } finally {
-    isBooking.value = false
+async function addToCart() {
+  if (!canBook.value || !experience.value || !selectedDeparture.value) {
+    return
   }
+
+  setCart({
+    experienceId: experience.value.id,
+    departureId: selectedDeparture.value.id,
+    participants: participants.value
+  })
+
+  await navigateTo(localePath({ name: 'cart' }))
 }
 </script>
 
@@ -118,7 +142,7 @@ async function book() {
           </p>
 
           <p class="mt-6 text-xl font-semibold">
-            {{ experience.price }}€ {{ t('experience.price') }}
+            {{ experience.price }} € {{ t('experience.price') }}
           </p>
 
           <div class="mt-6">
@@ -128,7 +152,7 @@ async function book() {
                 {{ t('experience.departure') }}
               </label>
 
-              <select id="departure" v-model.number="selectedDepartureId" :disabled="isBooking"
+              <select id="departure" v-model.number="selectedDepartureId"
                 class="mt-2 rounded-lg border border-gray-300 p-3">
                 <option disabled value="">
                   {{ t('experience.chooseDeparture') }}
@@ -175,8 +199,7 @@ async function book() {
             </label>
 
             <select id="participants" v-model.number="participants" :disabled="!selectedDeparture ||
-              selectedDeparture.available === 0 ||
-              isBooking
+              selectedDeparture.available === 0
               " class="mt-2 rounded-lg border border-gray-300 p-3">
               <option v-for="number in (selectedDeparture?.available ?? 0)" :key="number" :value="number">
                 {{ number }}
@@ -184,18 +207,18 @@ async function book() {
             </select>
 
             <p class="mt-4 text-xl font-bold">
-              {{ t('experience.total') }}: {{ total }}€
+              {{ t('experience.total') }}: {{ total }} €
             </p>
 
-            <button type="button" :disabled="!canBook || isBooking"
+            <button type="button" :disabled="!canBook"
               class="mt-6 rounded-lg bg-orange-600 px-5 py-3 font-semibold text-white disabled:cursor-not-allowed disabled:opacity-50"
-              @click="book">
-              {{ isBooking ? t('experience.booking') : t('experience.book') }}
+              @click="addToCart">
+              {{
+                isEditing
+                  ? t('experience.updateSelection')
+                  : t('experience.addToCart')
+              }}
             </button>
-
-            <p v-if="bookingError" role="alert" class="mt-4 text-red-700">
-              {{ bookingError }}
-            </p>
           </div>
         </article>
       </RequestState>
