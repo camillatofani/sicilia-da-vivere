@@ -4,7 +4,7 @@ A technical demo of a tourist-experience booking flow: browse experiences, pick 
 
 > **Payments run exclusively in Stripe Sandbox (test mode).** No real money is handled. Use Stripe test cards only, and never configure live keys for this project.
 
-Live demo: `<DEPLOY_URL_PLACEHOLDER>` (not deployed yet, replace once available).
+Live demo: `https://sicilia-da-vivere.vercel.app`.
 
 ## Stack
 
