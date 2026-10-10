@@ -1,1 +1,94 @@
 @import "tailwindcss";
+
+@theme {
+  --font-display: "Iowan Old Style", "Palatino Linotype", Palatino, Georgia, "Times New Roman", serif;
+
+  --color-cream: #fbf6ee;
+  --color-sand: #f1e8d8;
+  --color-sand-dark: #e0d2b8;
+  --color-ink: #2b2118;
+  --color-ink-soft: #5b4e41;
+  --color-olive: #4b5b34;
+  --color-olive-soft: #e9eddc;
+  --color-sea: #1d4c5b;
+  --color-sea-soft: #e1eef1;
+  --color-brick: #9a2b1b;
+  --color-brick-soft: #f8e4df;
+}
+
+@layer base {
+  html {
+    scroll-behavior: smooth;
+    -webkit-text-size-adjust: 100%;
+  }
+
+  body {
+    @apply bg-cream text-ink antialiased;
+    overflow-x: hidden;
+  }
+
+  h1,
+  h2,
+  h3 {
+    @apply font-display;
+    text-wrap: balance;
+  }
+
+  :focus-visible {
+    outline: 3px solid var(--color-sea);
+    outline-offset: 3px;
+    box-shadow: 0 0 0 3px var(--color-cream);
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    html {
+      scroll-behavior: auto;
+    }
+
+    *,
+    *::before,
+    *::after {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+    }
+  }
+}
+
+@layer components {
+  .container-page {
+    @apply mx-auto w-full max-w-6xl px-5 sm:px-8;
+  }
+
+  .card {
+    @apply rounded-3xl bg-white ring-1 ring-sand-dark/70;
+  }
+
+  .btn {
+    @apply inline-flex min-h-12 items-center justify-center gap-2 rounded-full px-6 py-3 text-center font-semibold transition-colors disabled:cursor-not-allowed disabled:opacity-50;
+  }
+
+  .btn-primary {
+    @apply bg-orange-700 text-white hover:bg-orange-800 disabled:hover:bg-orange-700;
+  }
+
+  .btn-secondary {
+    @apply border border-ink/25 bg-white/70 text-ink hover:bg-sand disabled:hover:bg-white/70;
+  }
+
+  .link-quiet {
+    @apply font-medium text-orange-800 underline decoration-orange-800/40 underline-offset-4 hover:text-orange-900 hover:decoration-orange-900;
+  }
+
+  .field {
+    @apply block min-h-12 w-full rounded-xl border border-sand-dark bg-white px-4 py-3 text-ink disabled:cursor-not-allowed disabled:bg-sand disabled:text-ink-soft;
+  }
+
+  .field-label {
+    @apply block text-sm font-semibold text-ink;
+  }
+
+  .eyebrow {
+    @apply text-sm font-semibold uppercase tracking-widest text-orange-800;
+  }
+}

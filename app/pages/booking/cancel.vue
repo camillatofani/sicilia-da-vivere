@@ -11,6 +11,8 @@ const isCancelling = ref(false)
 const result = ref<CancellationResult | null>(null)
 const hasError = ref(false)
 
+useHead({ title: () => t('booking.cancelQuestion') })
+
 async function cancelBooking() {
     if (isCancelling.value) return
 
@@ -36,39 +38,29 @@ async function cancelBooking() {
 </script>
 
 <template>
-    <main class="mx-auto max-w-2xl px-6 py-16 text-center">
-        <template v-if="result?.status === 'cancelled'">
-            <h1 class="text-3xl font-bold text-orange-600">
-                {{ t('booking.cancelled') }}
-            </h1>
-
-            <p class="mt-4">
-                {{ t('booking.released') }}
-            </p>
+    <StatusPanel v-if="result?.status === 'cancelled'" tone="success" :title="t('booking.cancelled')">
+        <p role="status">{{ t('booking.released') }}</p>
+        <template #actions>
+            <NuxtLink :to="localePath({ name: 'index' })" class="btn btn-primary">{{ t('experience.back') }}</NuxtLink>
         </template>
+    </StatusPanel>
 
-        <template v-else-if="result">
-            <h1 class="text-3xl font-bold">
-                {{ t('booking.alreadyCompleted') }}
-            </h1>
-
-            <p class="mt-4">
-                {{ t('booking.cannotCancel') }}
-            </p>
+    <StatusPanel v-else-if="result" tone="info" :title="t('booking.alreadyCompleted')">
+        <p role="status">{{ t('booking.cannotCancel') }}</p>
+        <template #actions>
+            <NuxtLink :to="localePath({ name: 'index' })" class="btn btn-primary">{{ t('experience.back') }}</NuxtLink>
         </template>
+    </StatusPanel>
 
-        <template v-else>
-            <h1 class="text-3xl font-bold">
-                {{ t('booking.cancelQuestion') }}
-            </h1>
+    <StatusPanel v-else tone="warning" :title="t('booking.cancelQuestion')">
+        <p>{{ t('booking.cancelExplanation') }}</p>
 
-            <p class="mt-4 text-gray-600">
-                {{ t('booking.cancelExplanation') }}
+        <template #actions>
+            <p v-if="hasError" role="alert" class="w-full rounded-2xl bg-brick-soft px-4 py-3 text-sm text-brick">
+                {{ t('booking.cancelError') }}
             </p>
 
-            <button type="button" :disabled="isCancelling"
-                class="mt-6 rounded-lg bg-orange-600 px-5 py-3 font-semibold text-white disabled:opacity-50"
-                @click="cancelBooking">
+            <button type="button" :disabled="isCancelling" class="btn btn-primary" @click="cancelBooking">
                 {{
                     isCancelling
                         ? t('booking.cancelling')
@@ -76,13 +68,7 @@ async function cancelBooking() {
                 }}
             </button>
 
-            <p v-if="hasError" role="alert" class="mt-4 text-red-700">
-                {{ t('booking.cancelError') }}
-            </p>
+            <NuxtLink :to="localePath({ name: 'index' })" class="link-quiet">{{ t('experience.back') }}</NuxtLink>
         </template>
-
-        <NuxtLink :to="localePath({ name: 'index' })" class="mt-8 block text-orange-700 underline">
-            {{ t('experience.back') }}
-        </NuxtLink>
-    </main>
+    </StatusPanel>
 </template>

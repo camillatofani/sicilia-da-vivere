@@ -1,7 +1,8 @@
 {
   "home": {
     "title": "Experience Sicily",
-    "subtitle": "Discover experiences on our island."
+    "subtitle": "Discover experiences on our island.",
+    "cta": "Explore the experiences"
   },
   "experience": {
     "title": "The experiences",
@@ -23,7 +24,10 @@
     "booking": "Preparing your booking...",
     "bookingError": "We could not prepare your booking. Please try again.",
     "loadError": "We could not load the experience.",
-    "departuresError": "We could not load the departures."
+    "departuresError": "We could not load the departures.",
+    "plan": "Plan your experience",
+    "empty": "There are no experiences available at the moment.",
+    "catalogError": "We could not load the experiences."
   },
   "booking": {
     "checking": "Checking your booking...",
@@ -57,13 +61,21 @@
     "changeSelection": "Change selection",
     "unavailable": "This experience or departure is no longer available.",
     "checkoutError": "We could not open checkout. Please check availability and try again.",
-    "clear": "Clear cart"
+    "clear": "Clear cart",
+    "badge": "one experience in your cart",
+    "browse": "Explore the experiences"
   },
   "errors": {
     "notFound": "This page does not exist or is no longer available.",
-    "generic": "Something went wrong."
+    "generic": "Something went wrong.",
+    "notFoundTitle": "Page not found"
   },
   "common": {
-    "loading": "Loading..."
+    "loading": "Loading...",
+    "retry": "Try again"
+  },
+  "nav": {
+    "language": "Language",
+    "skip": "Skip to content"
   }
 }

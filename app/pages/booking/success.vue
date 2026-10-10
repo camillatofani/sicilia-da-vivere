@@ -22,6 +22,8 @@ const {
   }
 })
 
+useHead({ title: () => t('booking.confirmed') })
+
 watch(
   [
     cartReady,
@@ -42,57 +44,46 @@ watch(
 </script>
 
 <template>
-  <main class="mx-auto max-w-2xl px-6 py-16 text-center">
-    <RequestState :status="status" :has-error="Boolean(error)" :loading-message="t('booking.checking')"
-      :error-message="t('booking.loadError')">
-      <section v-if="booking">
-        <template v-if="booking.status === 'paid'">
-          <h1 class="text-3xl font-bold text-orange-600">
-            {{ t('booking.confirmed') }}
-          </h1>
+  <div>
+    <section v-if="status === 'pending'" class="container-page py-14 sm:py-24">
+      <div class="mx-auto max-w-xl">
+        <RequestState :status="status" :has-error="false" :loading-message="t('booking.checking')" />
+      </div>
+    </section>
 
-          <p class="mt-4">
-            {{ t('booking.participants') }}: {{ booking.participants }}
-          </p>
+    <StatusPanel v-else-if="error || status === 'error'" tone="error" :title="t('booking.loadError')">
+      <template #actions>
+        <button type="button" class="btn btn-primary" @click="refresh()">
+          {{ t('booking.refresh') }}
+        </button>
+        <NuxtLink :to="localePath({ name: 'index' })" class="link-quiet">{{ t('experience.back') }}</NuxtLink>
+      </template>
+    </StatusPanel>
 
-          <p class="mt-2 font-semibold">
-            {{ t('booking.paidTotal') }}: {{ booking.total }} €
-          </p>
-        </template>
+    <StatusPanel v-else-if="booking?.status === 'paid'" tone="success" :title="t('booking.confirmed')">
+      <p>{{ t('booking.participants') }}: <strong class="text-ink">{{ booking.participants }}</strong></p>
+      <p class="font-display text-2xl font-bold text-ink">{{ t('booking.paidTotal') }}: {{ booking.total }} €</p>
+      <template #actions>
+        <NuxtLink :to="localePath({ name: 'index' })" class="btn btn-primary">{{ t('experience.back') }}</NuxtLink>
+      </template>
+    </StatusPanel>
 
-        <template v-else-if="booking.status === 'pending'">
-          <h1 class="text-3xl font-bold">
-            {{ t('booking.processing') }}
-          </h1>
+    <StatusPanel v-else-if="booking?.status === 'pending'" tone="info" :title="t('booking.processing')">
+      <p role="status">{{ t('booking.waiting') }}</p>
+      <template #actions>
+        <button type="button" :disabled="status === 'pending'" class="btn btn-primary" @click="refresh()">
+          {{ t('booking.refresh') }}
+        </button>
+        <NuxtLink :to="localePath({ name: 'index' })" class="link-quiet">{{ t('experience.back') }}</NuxtLink>
+      </template>
+    </StatusPanel>
 
-          <p class="mt-4 text-gray-600">
-            {{ t('booking.waiting') }}
-          </p>
-        </template>
-
-        <template v-else>
-          <h1 class="text-3xl font-bold">
-            {{
-              booking.status === 'expired'
-                ? t('booking.expired')
-                : t('booking.cancelled')
-            }}
-          </h1>
-
-          <p class="mt-4 text-gray-600">
-            {{ t('booking.inactive') }}
-          </p>
-        </template>
-      </section>
-    </RequestState>
-
-    <button v-if="error || booking?.status === 'pending'" type="button" :disabled="status === 'pending'"
-      class="mt-6 rounded-lg bg-orange-600 px-5 py-3 font-semibold text-white disabled:opacity-50" @click="refresh()">
-      {{ t('booking.refresh') }}
-    </button>
-
-    <NuxtLink :to="localePath({ name: 'index' })" class="mt-8 block text-orange-700 underline">
-      {{ t('experience.back') }}
-    </NuxtLink>
-  </main>
+    <StatusPanel v-else-if="booking" tone="warning"
+      :title="booking.status === 'expired' ? t('booking.expired') : t('booking.cancelled')">
+      <p>{{ t('booking.inactive') }}</p>
+      <template #actions>
+        <NuxtLink :to="localePath({ name: 'index' })" class="btn btn-primary">{{ t('experience.back') }}</NuxtLink>
+      </template>
+    </StatusPanel>
+  </div>
 </template>

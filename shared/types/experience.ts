@@ -23,4 +23,5 @@ export type Booking = {
   status: 'pending' | 'paid' | 'expired' | 'cancelled'
   expiresAt: string
   checkoutUrl: string
+  checkoutSessionId: string
 }

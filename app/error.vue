@@ -1,12 +1,16 @@
 <script setup lang="ts">
 import type { NuxtError } from '#app'
 
-defineProps<{
+const props = defineProps<{
   error: NuxtError
 }>()
 
 const { t } = useI18n()
 const localePath = useLocalePath()
+
+const isNotFound = computed(() => props.error.status === 404)
+
+useHead({ title: () => String(props.error.status ?? t('errors.generic')) })
 
 function goHome() {
   clearError({
@@ -16,21 +20,17 @@ function goHome() {
 </script>
 
 <template>
-  <main class="mx-auto max-w-2xl px-6 py-20 text-center">
-    <h1 class="text-5xl font-bold text-orange-600">
-      {{ error.status }}
-    </h1>
+  <AppShell>
+    <StatusPanel :tone="isNotFound ? 'warning' : 'error'"
+      :title="isNotFound ? t('errors.notFoundTitle') : t('errors.generic')">
+      <p v-if="error.status" class="font-display text-5xl font-bold text-orange-700">{{ error.status }}</p>
+      <p v-if="isNotFound">{{ t('errors.notFound') }}</p>
 
-    <p class="mt-6 text-xl">
-      {{
-        error.status === 404
-          ? t('errors.notFound')
-          : t('errors.generic')
-      }}
-    </p>
-
-    <button type="button" class="mt-8 rounded-lg bg-orange-600 px-5 py-3 font-semibold text-white" @click="goHome">
-      {{ t('experience.back') }}
-    </button>
-  </main>
+      <template #actions>
+        <button type="button" class="btn btn-primary" @click="goHome">
+          {{ t('experience.back') }}
+        </button>
+      </template>
+    </StatusPanel>
+  </AppShell>
 </template>
