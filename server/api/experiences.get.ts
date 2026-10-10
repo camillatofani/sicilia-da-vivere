@@ -35,6 +35,7 @@ export default defineEventHandler(async (event) => {
     `)
     .eq('locale', locale)
     .order('experience_id')
+    .overrideTypes<TranslatedExperienceRow[], { merge: false }>()
 
   if (error || !Array.isArray(data)) {
     throw createError({

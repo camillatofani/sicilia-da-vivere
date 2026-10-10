@@ -1,6 +1,6 @@
 import type { Departure } from '~~/shared/types/experience'
 
-export const departures: Departure[] = [
+export const departures: Omit<Departure, 'available'>[] = [
   {
     id: 1,
     experienceId: 1,

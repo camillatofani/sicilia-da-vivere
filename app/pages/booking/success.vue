@@ -71,7 +71,7 @@ watch(
     <StatusPanel v-else-if="booking?.status === 'pending'" tone="info" :title="t('booking.processing')">
       <p role="status">{{ t('booking.waiting') }}</p>
       <template #actions>
-        <button type="button" :disabled="status === 'pending'" class="btn btn-primary" @click="refresh()">
+        <button type="button" class="btn btn-primary" @click="refresh()">
           {{ t('booking.refresh') }}
         </button>
         <NuxtLink :to="localePath({ name: 'index' })" class="link-quiet">{{ t('experience.back') }}</NuxtLink>
