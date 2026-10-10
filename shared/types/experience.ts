@@ -5,3 +5,11 @@ export type Experience = {
   price: number
   imageUrl: string
 }
+
+export type Departure = {
+  id: number
+  experienceId: number
+  date: string
+  time: string
+  capacity: number
+}

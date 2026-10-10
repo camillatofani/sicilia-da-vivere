@@ -1,9 +1,9 @@
 <script setup lang="ts">
-    import type { Experience } from '~~/shared/types/experience'
-    
-    const { data: experiences, status, error } = await useFetch<Experience[]>('/api/experiences')
-    
-    const title = 'Sicilia, da vivere';
+import type { Experience } from '~~/shared/types/experience'
+
+const { data: experiences, status, error } = await useFetch<Experience[]>('/api/experiences')
+
+const title = 'Sicilia, da vivere';
 </script>
 
 <template>
