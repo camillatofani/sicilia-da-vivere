@@ -1,4 +1,13 @@
-import { getSupabaseClient } from "../../../utils/supabase"
+import type { Departure } from '~~/shared/types/experience'
+
+type AvailabilityRow = {
+  id: number
+  experience_id: number
+  date: string
+  time: string
+  capacity: number
+  available: number
+}
 
 export default defineEventHandler(async (event) => {
   const experienceId = Number(getRouterParam(event, 'id'))
@@ -10,27 +19,26 @@ export default defineEventHandler(async (event) => {
     })
   }
 
-  const supabase = getSupabaseClient()
+  const supabase = getSupabaseAdminClient()
 
   const { data, error } = await supabase
-    .from('departures')
-    .select('id, experience_id, date, time, capacity')
-    .eq('experience_id', experienceId)
-    .order('date')
-    .order('time')
-
-  if (error) {
-    throw createError({
-      statusCode: 500,
-      statusMessage: 'Unable to load departures'
+    .rpc('get_departure_availability', {
+      p_experience_id: experienceId
     })
-  }
 
-  return data.map(item => ({
+    if (error || !Array.isArray(data)) {
+      throw createError({
+        statusCode: 500,
+        statusMessage: 'Unable to load departures'
+      })
+    }
+
+ return data.map((item: AvailabilityRow): Departure => ({
     id: item.id,
     experienceId: item.experience_id,
     date: item.date,
     time: item.time.slice(0, 5),
-    capacity: item.capacity
+    capacity: item.capacity,
+    available: item.available
   }))
 })

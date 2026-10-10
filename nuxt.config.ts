@@ -9,6 +9,10 @@ export default defineNuxtConfig({
   },
   runtimeConfig: {
     supabaseUrl: '',
-    supabaseKey: ''
+    supabaseKey: '',
+    supabaseSecretKey: '',
+    stripeSecretKey: '',
+    siteUrl: 'http://localhost:3000',
+    stripeWebhookSecret: ''
   },
 })

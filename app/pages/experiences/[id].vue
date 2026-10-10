@@ -1,9 +1,9 @@
 <script setup lang="ts">
-import type { Experience, Departure } from '~~/shared/types/experience'
+import type { Experience, Departure, Booking } from '~~/shared/types/experience'
 
 const route = useRoute()
 const { data: experience, status: statusExp, error: errorExp } = await useFetch<Experience>(() => `/api/experiences/${route.params.id}`)
-const { data: departures, status: statusDep, error: errorDep } = await useFetch<Departure[]>(() => `/api/experiences/${route.params.id}/departures`)
+const { data: departures, status: statusDep, error: errorDep, refresh: refreshDepartures } = await useFetch<Departure[]>(() => `/api/experiences/${route.params.id}/departures`)
 
 const participants = ref(1)
 const selectedDepartureId = ref<number | ''>('')
@@ -13,21 +13,56 @@ const selectedDeparture = computed(() => {
   )
 })
 watch(selectedDeparture, (departure) => {
-  if (departure && participants.value > departure.capacity) {
-    participants.value = departure.capacity
+  if (!departure) return
+
+  if (departure.available === 0) {
+    participants.value = 0
+  } else {
+    participants.value = Math.min(
+      Math.max(participants.value, 1),
+      departure.available
+    )
   }
 }, { flush: 'post' })
 const total = computed(() => {
   return (experience.value?.price ?? 0) * participants.value
 })
 const canBook = computed(() => {
+  const departure = selectedDeparture.value
+
   return statusDep.value === 'success'
     && !errorDep.value
-    && Boolean(selectedDeparture.value)
+    && Boolean(departure)
+    && participants.value >= 1
+    && participants.value <= (departure?.available ?? 0)
 })
 
-function book() {
-  window.alert('Avanti alla pagina di pagamento per completare la prenotazione.')
+const isBooking = ref(false)
+const bookingError = ref('')
+
+async function book() {
+  if (!canBook.value || isBooking.value) return
+
+  isBooking.value = true
+  bookingError.value = ''
+
+  try {
+    const booking = await $fetch<Booking>('/api/bookings', {
+      method: 'POST',
+      body: {
+        departureId: selectedDepartureId.value,
+        participants: participants.value
+      }
+    })
+
+    window.location.assign(booking.checkoutUrl)
+  } catch (error) {
+    console.error('Errore prenotazione:', error)
+    bookingError.value =
+      'Non siamo riusciti a riservare i posti. Potrebbero non essere più disponibili.'
+  } finally {
+    isBooking.value = false
+  }
 }
 </script>
 
@@ -84,6 +119,14 @@ function book() {
               Massimo {{ selectedDeparture.capacity }} partecipanti per questa partenza.
             </p>
 
+            <p v-if="selectedDeparture" class="mt-2">
+              {{
+                selectedDeparture.available === 0
+                  ? 'Nessun posto disponibile'
+                  : `Posti disponibili: ${selectedDeparture.available}`
+              }}
+            </p>
+
           </div>
 
           <div class="mt-6">
@@ -94,7 +137,7 @@ function book() {
 
             <select id="participants" :disabled="!selectedDeparture" v-model.number="participants"
               class="mt-2 rounded-lg border border-gray-300 p-3">
-              <option v-for="number in (selectedDeparture?.capacity ?? 0)" :key="number" :value="number">
+              <option v-for="number in (selectedDeparture?.available ?? 0)" :key="number" :value="number">
                 {{ number }}
               </option>
             </select>
@@ -103,10 +146,14 @@ function book() {
               Totale: {{ total }} €
             </p>
 
-            <button type="button" :disabled="!canBook" @click="book"
+            <button type="button" :disabled="!canBook || isBooking" @click="book"
               class="mt-6 rounded-lg bg-orange-600 px-5 py-3 font-semibold text-white disabled:cursor-not-allowed disabled:opacity-50">
-              Prenota
+              {{ isBooking ? 'Prenotazione in corso...' : 'Prenota' }}
             </button>
+
+            <p v-if="bookingError" role="alert" class="mt-4 text-red-700">
+              {{ bookingError }}
+            </p>
 
           </div>
         </article>
