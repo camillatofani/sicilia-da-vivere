@@ -12,6 +12,11 @@ const selectedDeparture = computed(() => {
     departure => departure.id === selectedDepartureId.value
   )
 })
+watch(selectedDeparture, (departure) => {
+  if (departure && participants.value > departure.capacity) {
+    participants.value = departure.capacity
+  }
+}, { flush: 'post' })
 const total = computed(() => {
   return (experience.value?.price ?? 0) * participants.value
 })
@@ -33,20 +38,12 @@ function book() {
     </NuxtLink>
 
     <div class="mt-6">
-      <RequestState
-        :status="statusExp"
-        :has-error="Boolean(errorExp)"
-        error-message="Non siamo riusciti a caricare l’esperienza."
-      >
+      <RequestState :status="statusExp" :has-error="Boolean(errorExp)"
+        error-message="Non siamo riusciti a caricare l’esperienza.">
         <article v-if="experience">
 
-          <img
-            :src="experience.imageUrl"
-            :alt="experience.title"
-            width="1200"
-            height="800"
-            class="aspect-[3/2] w-full rounded-2xl object-cover"
-          />
+          <img :src="experience.imageUrl" :alt="experience.title" width="1200" height="800"
+            class="aspect-[3/2] w-full rounded-2xl object-cover" />
 
           <h1 class="mt-6 text-3xl font-bold">
             {{ experience.title }}
@@ -62,27 +59,17 @@ function book() {
 
           <div class="mt-6">
 
-            <RequestState
-              :status="statusDep"
-              :has-error="Boolean(errorDep)"
-              error-message="Non siamo riusciti a caricare le partenze."
-            >
+            <RequestState :status="statusDep" :has-error="Boolean(errorDep)"
+              error-message="Non siamo riusciti a caricare le partenze.">
               <label for="departure" class="block font-medium">
                 Partenza
               </label>
 
-              <select
-                id="departure"
-                v-model.number="selectedDepartureId"
-                class="mt-2 rounded-lg border border-gray-300 p-3"
-              >
+              <select id="departure" v-model.number="selectedDepartureId"
+                class="mt-2 rounded-lg border border-gray-300 p-3">
                 <option disabled value="">Scegli una partenza</option>
 
-                <option
-                  v-for="departure in departures"
-                  :key="departure.id"
-                  :value="departure.id"
-                >
+                <option v-for="departure in departures" :key="departure.id" :value="departure.id">
                   {{ departure.date }} alle {{ departure.time }}
                 </option>
               </select>
@@ -92,7 +79,11 @@ function book() {
               Data selezionata:
               {{ selectedDeparture.date }} alle {{ selectedDeparture.time }}
             </p>
-          
+
+            <p v-if="selectedDeparture" class="mt-2 text-gray-600">
+              Massimo {{ selectedDeparture.capacity }} partecipanti per questa partenza.
+            </p>
+
           </div>
 
           <div class="mt-6">
@@ -101,12 +92,9 @@ function book() {
               Partecipanti
             </label>
 
-            <select
-              id="participants"
-              v-model.number="participants"
-              class="mt-2 rounded-lg border border-gray-300 p-3"
-            >
-              <option v-for="number in 6" :key="number" :value="number">
+            <select id="participants" :disabled="!selectedDeparture" v-model.number="participants"
+              class="mt-2 rounded-lg border border-gray-300 p-3">
+              <option v-for="number in (selectedDeparture?.capacity ?? 0)" :key="number" :value="number">
                 {{ number }}
               </option>
             </select>
@@ -115,12 +103,8 @@ function book() {
               Totale: {{ total }} €
             </p>
 
-            <button
-              type="button"
-              :disabled="!canBook"
-              @click="book"
-              class="mt-6 rounded-lg bg-orange-600 px-5 py-3 font-semibold text-white disabled:cursor-not-allowed disabled:opacity-50"
-            >
+            <button type="button" :disabled="!canBook" @click="book"
+              class="mt-6 rounded-lg bg-orange-600 px-5 py-3 font-semibold text-white disabled:cursor-not-allowed disabled:opacity-50">
               Prenota
             </button>
 
