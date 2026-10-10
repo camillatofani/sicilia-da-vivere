@@ -1,0 +1,33 @@
+{
+  "home": {
+    "title": "Sicilia, da vivere",
+    "subtitle": "Scopri le esperienze della nostra isola."
+  },
+  "experience": {
+    "title": "Le esperienze",
+    "discover": "Scopri l’esperienza",
+    "price": "a persona",
+    "back": "Torna alle esperienze",
+    "departure": "Partenza",
+    "chooseDeparture": "Scegli una partenza",
+    "departureOption": "{date} alle {time}",
+    "capacity": "Capacità massima: {count} partecipanti",
+    "participants": "Partecipanti",
+    "available": "Posti disponibili: {count}",
+    "soldOut": "Nessun posto disponibile",
+    "selectedDeparture": "Partenza selezionata: {date} alle {time}",
+    "total": "Totale",
+    "book": "Prenota",
+    "booking": "Prenotazione in corso...",
+    "bookingError": "Non siamo riusciti a preparare la prenotazione. Riprova.",
+    "loadError": "Non siamo riusciti a caricare l’esperienza.",
+    "departuresError": "Non siamo riusciti a caricare le partenze."
+  },
+  "errors": {
+    "notFound": "Questa pagina non esiste o non è più disponibile.",
+    "generic": "Qualcosa è andato storto."
+  },
+  "common": {
+    "loading": "Caricamento..."
+  }
+}

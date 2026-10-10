@@ -5,8 +5,13 @@ defineProps<{
   error: NuxtError
 }>()
 
+const { t } = useI18n()
+const localePath = useLocalePath()
+
 function goHome() {
-  clearError({ redirect: '/' })
+  clearError({
+    redirect: localePath({ name: 'index' })
+  })
 }
 </script>
 
@@ -19,17 +24,13 @@ function goHome() {
     <p class="mt-6 text-xl">
       {{
         error.status === 404
-          ? 'Questa pagina non esiste o non è più disponibile.'
-          : 'Qualcosa è andato storto.'
+          ? t('errors.notFound')
+          : t('errors.generic')
       }}
     </p>
 
-    <button
-      type="button"
-      class="mt-8 rounded-lg bg-orange-600 px-5 py-3 font-semibold text-white"
-      @click="goHome"
-    >
-      Torna alle esperienze
+    <button type="button" class="mt-8 rounded-lg bg-orange-600 px-5 py-3 font-semibold text-white" @click="goHome">
+      {{ t('experience.back') }}
     </button>
   </main>
 </template>

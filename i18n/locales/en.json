@@ -1,0 +1,33 @@
+{
+  "home": {
+    "title": "Experience Sicily",
+    "subtitle": "Discover experiences on our island."
+  },
+  "experience": {
+    "title": "The experiences",
+    "discover": "Discover the experience",
+    "price": "per person",
+    "back": "Back to experiences",
+    "departure": "Departure",
+    "chooseDeparture": "Choose a departure",
+    "departureOption": "{date} at {time}",
+    "capacity": "Maximum capacity: {count} participants",
+    "participants": "Participants",
+    "available": "Available spots: {count}",
+    "soldOut": "No spots available",
+    "selectedDeparture": "Selected departure: {date} at {time}",
+    "total": "Total",
+    "book": "Book now",
+    "booking": "Preparing your booking...",
+    "bookingError": "We could not prepare your booking. Please try again.",
+    "loadError": "We could not load the experience.",
+    "departuresError": "We could not load the departures."
+  },
+  "errors": {
+    "notFound": "This page does not exist or is no longer available.",
+    "generic": "Something went wrong."
+  },
+  "common": {
+    "loading": "Loading..."
+  }
+}

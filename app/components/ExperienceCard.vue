@@ -1,4 +1,7 @@
 <script setup lang="ts">
+const localePath = useLocalePath()
+const { t } = useI18n()
+
 type CardProps = {
   id: number
   imageUrl: string
@@ -21,10 +24,16 @@ withDefaults(defineProps<CardProps>(), {
 
     <h2 class="mt-4 text-xl font-semibold">{{ title }}</h2>
     <p class="mt-2 text-gray-600">{{ description }}</p>
-    <p class="mt-4 font-semibold">{{ price }} € a persona</p>
+    <p class="mt-4 font-semibold">{{ price }}€ {{ t('experience.price') }}</p>
 
-    <NuxtLink :to="`/experiences/${id}`" class="mt-4 inline-block text-orange-700 underline">
-      Scopri l’esperienza
+    <NuxtLink
+      :to="localePath({
+        name: 'experiences-id',
+        params: { id }
+      })"
+      class="mt-4 inline-block text-orange-700 underline"
+    >
+      {{ t('experience.discover') }}
     </NuxtLink>
   </article>
 </template>
